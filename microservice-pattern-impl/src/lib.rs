@@ -11,15 +11,15 @@ pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
     let ident_client = format_ident!("{ident}Client");
     let ident_server = format_ident!("{ident}Server");
 
-    let mut methods = vec![];
+    let mut funcs = vec![];
     for item in t.items {
         match item {
-            TraitItem::Method(mut method) => {
+            TraitItem::Fn(mut func) => {
                 // prepend &self to the argument list.
-                method.sig.inputs.insert(0, parse_quote!(&self));
-                methods.push(TraitItem::Method(method));
+                func.sig.inputs.insert(0, parse_quote!(&self));
+                funcs.push(TraitItem::Fn(func));
             }
-            _ => panic!("only methods are supported"),
+            _ => {}
         }
     }
 
@@ -29,7 +29,7 @@ pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
         #[cfg_attr(test, mockall::automock)]
         #[async_trait::async_trait]
         pub trait #ident: Send + Sync + 'static {
-            #(async #methods)*
+            #(async #funcs)*
         }
         #[derive(Clone, shrinkwraprs::Shrinkwrap)]
         pub struct #ident_client(std::sync::Arc<dyn #ident>);

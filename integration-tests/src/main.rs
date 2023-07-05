@@ -3,7 +3,6 @@ trait MyService {
     fn a(x: &str) -> u32;
     fn b(x: u32) -> Option<u32>;
 }
-
 struct MockImpl;
 #[microservice_pattern::service_impl]
 impl MyService for MockImpl {
