@@ -1,11 +1,11 @@
-#[micro_service_pattern::def_service]
+#[micro_service_pattern::service]
 trait MyService {
     fn a(x: &str) -> u32;
     async fn b(x: u32) -> Option<u32>;
 }
 
 struct Impl;
-#[micro_service_pattern::impl_service]
+#[micro_service_pattern::service_impl]
 impl MyService for Impl {
     fn a(&self, x: &str) -> u32 {
         0
@@ -27,7 +27,9 @@ mod tests {
         let mut mock = MockMyService::new();
         mock.expect_a().return_const(1u32);
         assert_eq!(mock.a("hello"), 1);
-        // mock.expect_b().return_const(None);
-        // assert_eq!(mock.b(1).await, None);
+        mock.expect_b().return_const(None);
+        assert_eq!(mock.b(1).await, None);
     }
 }
+
+fn main() {}

@@ -47,8 +47,8 @@ Dependency loops are not allowed in this library because it is a vicious way of 
 graph LR
   S1(Service1)
   S2(Service2)
-  S1 -->|call_A| S2
-  S2 -->|call_B| S1
+  S1 -->|1. call_A| S2
+  S2 -->|2. call_B| S1
 ```
 
 ==
@@ -57,13 +57,13 @@ graph LR
 graph LR
   S1(Service1)
   S2(Service2)
-  T(Task)
+  EX(Executor)
   Q(Queue)
-  S1 -->|queue task| Q
-  Q -->|dequeue task| T
-  T -->|call_A| S2
-  T -.->|dependency| Q
-  S2 -->|call_B| S1
+  S1 -->|1. queue task| Q
+  Q -->|2. dequeue task| EX
+  EX -->|3. call_A| S2
+  EX -.->|dependency| Q
+  S2 -->|4. call_B| S1
 ```
 
 This is quite similar to sidecar pattern.
@@ -73,7 +73,7 @@ graph LR
   S1(Service1)
   S2(Service2)
   S3(Queue Service)
-  S1 -->|queue task| S3
-  S2 -->|find new task| S3
-  S2 -->|call| S1
+  S1 -->|1. queue task| S3
+  S2 -->|2. find new task| S3
+  S2 -->|3. call| S1
 ```

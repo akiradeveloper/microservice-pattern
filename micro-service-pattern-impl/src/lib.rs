@@ -1,11 +1,10 @@
 use proc_macro::TokenStream;
 
-use proc_macro2::*;
 use quote::*;
 use syn::*;
 
 #[proc_macro_attribute]
-pub fn def_service(args: TokenStream, item: TokenStream) -> TokenStream {
+pub fn service(args: TokenStream, item: TokenStream) -> TokenStream {
     let t = syn::parse::<ItemTrait>(item).unwrap();
 
     let ident = t.ident;
@@ -16,6 +15,7 @@ pub fn def_service(args: TokenStream, item: TokenStream) -> TokenStream {
     for item in t.items {
         match item {
             TraitItem::Method(mut method) => {
+                // prepend &self to the argument list.
                 method.sig.inputs.insert(0, parse_quote!(&self));
                 methods.push(TraitItem::Method(method));
             }
@@ -24,8 +24,10 @@ pub fn def_service(args: TokenStream, item: TokenStream) -> TokenStream {
     }
 
     let code = quote! {
-        #[async_trait::async_trait]
+        // automock should precedes async_trait.
+        // https://docs.rs/mockall/latest/mockall/#async-traits
         #[cfg_attr(test, mockall::automock)]
+        #[async_trait::async_trait]
         pub trait #ident {
             #(#methods)*
         }
@@ -42,7 +44,7 @@ pub fn def_service(args: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 #[proc_macro_attribute]
-pub fn impl_service(args: TokenStream, item: TokenStream) -> TokenStream {
+pub fn service_impl(_: TokenStream, item: TokenStream) -> TokenStream {
     let t = syn::parse::<ItemImpl>(item).unwrap();
     let code = quote! {
         #[async_trait::async_trait]
