@@ -29,7 +29,7 @@ pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
         #[cfg_attr(test, mockall::automock)]
         #[async_trait::async_trait]
         pub trait #ident {
-            #(#methods)*
+            #(async #methods)*
         }
         #[derive(Clone, shrinkwraprs::Shrinkwrap)]
         pub struct #ident_client(std::sync::Arc<dyn #ident>);
