@@ -4,9 +4,9 @@ trait MyService {
     async fn b(x: u32) -> Option<u32>;
 }
 
-struct Impl;
+struct MockImpl;
 #[microservice_pattern::service_impl]
-impl MyService for Impl {
+impl MyService for MockImpl {
     fn a(&self, x: &str) -> u32 {
         0
     }
@@ -18,17 +18,19 @@ impl MyService for Impl {
 #[cfg(test)]
 mod tests {
     use super::*;
+
     #[tokio::test]
     async fn test() {
-        let cli = MyServiceServer::new(Impl);
+        let cli: MyServiceClient = MyServiceServer::new(MockImpl);
         assert_eq!(cli.a("hello"), 0);
         assert_eq!(cli.b(1).await, None);
 
+        // mockall works
         let mut mock = MockMyService::new();
         mock.expect_a().return_const(1u32);
         assert_eq!(mock.a("hello"), 1);
-        mock.expect_b().return_const(None);
-        assert_eq!(mock.b(1).await, None);
+        mock.expect_b().return_const(Some(1));
+        assert_eq!(mock.b(1).await, Some(1));
     }
 }
 

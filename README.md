@@ -4,7 +4,7 @@
 
 This crate advocates the use of **in-process microservice pattern**.
 
-The typical modern system is consist of bunch of gRPC micro services that communicates each other. The gRPC microservice is a process whose internal is consist of logics and data structures. 
+The typical modern system is consist of bunch of gRPC microservices that communicates each other. The gRPC microservice is a process whose internal is consist of logics and data structures. 
 
 To develop the internal, in-process microservices is a very helping layer because you can modularize the internal in the same way the gRPC services does in the inter-process layer.
 

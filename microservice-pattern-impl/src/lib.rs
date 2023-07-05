@@ -4,7 +4,7 @@ use quote::*;
 use syn::*;
 
 #[proc_macro_attribute]
-pub fn service(args: TokenStream, item: TokenStream) -> TokenStream {
+pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
     let t = syn::parse::<ItemTrait>(item).unwrap();
 
     let ident = t.ident;
