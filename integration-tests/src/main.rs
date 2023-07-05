@@ -1,11 +1,11 @@
-#[micro_service_pattern::service]
+#[microservice_pattern::service]
 trait MyService {
     fn a(x: &str) -> u32;
     async fn b(x: u32) -> Option<u32>;
 }
 
 struct Impl;
-#[micro_service_pattern::service_impl]
+#[microservice_pattern::service_impl]
 impl MyService for Impl {
     fn a(&self, x: &str) -> u32 {
         0

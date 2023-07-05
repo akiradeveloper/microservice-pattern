@@ -1,6 +1,6 @@
 [workspace]
 members = [
-  "micro-service-pattern",
-  "micro-service-pattern-impl",
+  "microservice-pattern",
+  "microservice-pattern-impl",
   "integration-tests",
 ]

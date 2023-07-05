@@ -1,20 +1,20 @@
-# micro-service-pattern
+# microservice-pattern
 
 ## Concept
 
-This crate advocates the use of **in-process micro service pattern**.
+This crate advocates the use of **in-process microservice pattern**.
 
-The typical modern system is consist of bunch of gRPC micro services that communicates each other. The gRPC micro service is a process whose internal is consist of logics and data structures. 
+The typical modern system is consist of bunch of gRPC micro services that communicates each other. The gRPC microservice is a process whose internal is consist of logics and data structures. 
 
-To develop the internal, in-process micro services is a very helping layer because you can modularize the internal in the same way the gRPC services does in the inter-process layer.
+To develop the internal, in-process microservices is a very helping layer because you can modularize the internal in the same way the gRPC services does in the inter-process layer.
 
 
 ```mermaid
 graph LR
   SYSTEM(System)
-  GRPC(gRPC Service)
+  GRPC(gRPC Microservice)
   subgraph In Process
-    MICRO(Micro Service)
+    MICRO(Microservice)
     DATA(Data Structure)
 	LOGIC(Logic)
   end
