@@ -15,6 +15,20 @@ impl MyService for MockImpl {
     }
 }
 
+#[microservice_pattern::service]
+trait MyApp {
+    fn c() -> u32;
+}
+struct AppImpl {
+    cli: MyServiceClient,
+}
+#[microservice_pattern::service_impl]
+impl MyApp for AppImpl {
+    async fn c(&self) -> u32 {
+        0
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -22,6 +36,7 @@ mod tests {
     #[tokio::test]
     async fn test() {
         let cli: MyServiceClient = MyServiceServer::new(MockImpl);
+
         assert_eq!(cli.a("hello").await, 0);
         assert_eq!(cli.b(1).await, None);
 

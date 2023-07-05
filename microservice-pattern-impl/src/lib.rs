@@ -28,14 +28,14 @@ pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
         // https://docs.rs/mockall/latest/mockall/#async-traits
         #[cfg_attr(test, mockall::automock)]
         #[async_trait::async_trait]
-        pub trait #ident {
+        pub trait #ident: Send + Sync + 'static {
             #(async #methods)*
         }
         #[derive(Clone, shrinkwraprs::Shrinkwrap)]
         pub struct #ident_client(std::sync::Arc<dyn #ident>);
         pub struct #ident_server;
         impl #ident_server {
-            pub fn new(svc: impl #ident + 'static) -> #ident_client {
+            pub fn new(svc: impl #ident) -> #ident_client {
                 #ident_client(std::sync::Arc::new(svc))
             }
         }
