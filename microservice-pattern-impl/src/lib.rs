@@ -8,8 +8,7 @@ pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
     let t = syn::parse::<ItemTrait>(item).unwrap();
 
     let ident = t.ident;
-    let ident_client = format_ident!("{ident}Client");
-    let ident_server = format_ident!("{ident}Server");
+    let ident_svc = format_ident!("{ident}Svc");
 
     let mut funcs = vec![];
     for item in t.items {
@@ -26,17 +25,16 @@ pub fn service(_: TokenStream, item: TokenStream) -> TokenStream {
     let code = quote! {
         // automock should precedes async_trait.
         // https://docs.rs/mockall/latest/mockall/#async-traits
-        #[cfg_attr(test, mockall::automock)]
+        #[mockall::automock]
         #[async_trait::async_trait]
         pub trait #ident: Send + Sync + 'static {
             #(async #funcs)*
         }
         #[derive(Clone, shrinkwraprs::Shrinkwrap)]
-        pub struct #ident_client(std::sync::Arc<dyn #ident>);
-        pub struct #ident_server;
-        impl #ident_server {
-            pub fn new(svc: impl #ident) -> #ident_client {
-                #ident_client(std::sync::Arc::new(svc))
+        pub struct #ident_svc(std::sync::Arc<dyn #ident>);
+        impl #ident_svc {
+            pub fn new(svc: impl #ident) -> #ident_svc {
+                #ident_svc(std::sync::Arc::new(svc))
             }
         }
     };

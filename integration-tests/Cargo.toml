@@ -9,7 +9,7 @@ edition = "2021"
 microservice-pattern = { path = "../microservice-pattern" }
 async-trait = "*"
 shrinkwraprs = "*"
+mockall = "*"
 
 [dev-dependencies]
 tokio = { version = "*", features = ["full"] }
-mockall = "*"
